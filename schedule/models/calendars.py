@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.contenttypes import generic
 from django.db import models
 from django.db.models import Q
@@ -5,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.template.defaultfilters import slugify
 import datetime
 from dateutil import rrule
 from schedule.utils import EventListManager
@@ -76,6 +78,7 @@ class CalendarManager(models.Manager):
                 calendar = Calendar(name = unicode(obj))
             else:
                 calendar = Calendar(name = name)
+            calendar.slug = slugify(calendar.name)
             calendar.save()
             calendar.create_relation(obj, distinction)
             return calendar
@@ -140,7 +143,7 @@ class Calendar(models.Model):
 
     def __unicode__(self):
         return self.name
-    
+
     def events(self):
         return self.event_set.all()
     events = property(events)
@@ -171,7 +174,7 @@ class Calendar(models.Model):
         return EventListManager(self.events.all()).occurrences_after(date)
 
     def get_absolute_url(self):
-        return reverse('s_calendar', args=[self.slug])
+        return reverse('calendar_home', kwargs={'calendar_slug':self.slug})
 
     def add_event_url(self):
         return reverse('s_create_event_in_calendar', args=[self.slug])
@@ -233,4 +236,4 @@ class CalendarRelation(models.Model):
         app_label = 'schedule'
 
     def __unicode__(self):
-        return '%s - %s' %(self.calendar, self.content_object)
+        return u'%s - %s' %(self.calendar, self.content_object)
