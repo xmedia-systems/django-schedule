@@ -315,4 +315,3 @@ class Day(Period):
 
     def current_week(self):
         return Week(self.events, self.start)
-
