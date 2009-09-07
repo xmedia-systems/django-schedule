@@ -30,6 +30,7 @@ class TestPeriod(TestCase):
         self.period = Period(events=Event.objects.all(),
                             start = datetime.datetime(2008,1,4,7,0),
                             end = datetime.datetime(2008,1,21,7,0))
+
     def test_get_occurrences(self):
         occurrence_list = self.period.occurrences
         self.assertEqual(["%s to %s" %(o.start, o.end) for o in occurrence_list],
@@ -62,7 +63,9 @@ class TestPeriod(TestCase):
                                           datetime.datetime(2008,1,4,7,12) )
         self.failIf( slot.has_occurrences() )
 
+
 class TestYear(TestCase):
+
     def setUp(self):
         self.year = Year(events=[], date=datetime.datetime(2008,4,1))
 
@@ -73,6 +76,7 @@ class TestYear(TestCase):
 
 
 class TestMonth(TestCase):
+
     def setUp(self):
         rule = Rule(frequency = "WEEKLY")
         rule.save()
@@ -127,7 +131,7 @@ class TestMonth(TestCase):
 
     def test_get_days(self):
         weeks = self.month.get_weeks()
-        week = weeks[0]
+        week = list(weeks)[0]
         days = week.get_days()
         actuals = [(len(day.occurrences), day.start,day.end) for day in days]
 
@@ -151,7 +155,7 @@ class TestMonth(TestCase):
 
         else:
             expecteds = [
-                (0, datetime.datetime(2008, 1, 28, 0, 0),
+               (0, datetime.datetime(2008, 1, 28, 0, 0),
                  datetime.datetime(2008, 1, 29, 0, 0)),
                 (0, datetime.datetime(2008, 1, 29, 0, 0),
                  datetime.datetime(2008, 1, 30, 0, 0)),
@@ -172,11 +176,12 @@ class TestMonth(TestCase):
 
 
     def test_month_convenience_functions(self):
-        self.assertEqual( self.month.prev_month(), datetime.datetime(2008, 1, 1, 0, 0))
-        self.assertEqual( self.month.next_month(), datetime.datetime(2008, 3, 1, 0, 0))
-        self.assertEqual( self.month.current_year(), datetime.datetime(2008, 1, 1, 0, 0))
-        self.assertEqual( self.month.prev_year(), datetime.datetime(2007, 1, 1, 0, 0))
-        self.assertEqual( self.month.next_year(), datetime.datetime(2009, 1, 1, 0, 0))
+        self.assertEqual( self.month.prev_month().start, datetime.datetime(2008, 1, 1, 0, 0))
+        self.assertEqual( self.month.next_month().start, datetime.datetime(2008, 3, 1, 0, 0))
+        self.assertEqual( self.month.current_year().start, datetime.datetime(2008, 1, 1, 0, 0))
+        self.assertEqual( self.month.prev_year().start, datetime.datetime(2007, 1, 1, 0, 0))
+        self.assertEqual( self.month.next_year().start, datetime.datetime(2009, 1, 1, 0, 0))
+
 
 class TestDay(TestCase):
     def setUp(self):
@@ -188,8 +193,8 @@ class TestDay(TestCase):
         self.assertEqual( self.day.end, datetime.datetime(2008, 2, 8, 0, 0))
 
     def test_day_convenience_functions(self):
-        self.assertEqual( self.day.prev_day(), datetime.datetime(2008, 2, 6, 0, 0))
-        self.assertEqual( self.day.next_day(), datetime.datetime(2008, 2, 8, 0, 0))
+        self.assertEqual( self.day.prev_day().start, datetime.datetime(2008, 2, 6, 0, 0))
+        self.assertEqual( self.day.next_day().start, datetime.datetime(2008, 2, 8, 0, 0))
 
     def test_time_slot(self):
         slot_start = datetime.datetime(2008, 2, 7, 13, 30)
@@ -197,3 +202,34 @@ class TestDay(TestCase):
         period = self.day.get_time_slot( slot_start, slot_end )
         self.assertEqual( period.start, slot_start )
         self.assertEqual( period.end, slot_end )
+
+
+class TestOccurrencePool(TestCase):
+    
+    def setUp(self):
+        rule = Rule(frequency = "WEEKLY")
+        rule.save()
+        cal = Calendar(name="MyCal")
+        cal.save()
+        data = {
+                'title': 'Recent Event',
+                'start': datetime.datetime(2008, 1, 5, 8, 0),
+                'end': datetime.datetime(2008, 1, 5, 9, 0),
+                'end_recurring_period' : datetime.datetime(2008, 5, 5, 0, 0),
+                'rule': rule,
+                'calendar': cal
+               }
+        self.recurring_event = Event(**data)
+        self.recurring_event.save()
+
+    def testPeriodFromPool(self):
+        """
+            Test that period initiated with occurrence_pool returns the same occurrences as "straigh" period
+            in a corner case whereby a period's start date is equal to the occurrence's end date
+        """
+        start = datetime.datetime(2008, 1, 5, 9, 0)
+        end = datetime.datetime(2008, 1, 5, 10, 0)
+        parent_period = Period(Event.objects.all(), start, end)
+        period = Period(parent_period.events, start, end, parent_period.get_persisted_occurrences(), parent_period.occurrences)
+        self.assertEquals(parent_period.occurrences, period.occurrences)
+
