@@ -1,5 +1,4 @@
 .. _ref-install:
-
 ============
 Installation
 ============
