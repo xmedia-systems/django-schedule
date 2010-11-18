@@ -31,7 +31,7 @@ class Event(models.Model):
     created_on = models.DateTimeField(_("created on"), default = datetime.datetime.now)
     rule = models.ForeignKey(Rule, null = True, blank = True, verbose_name=_("rule"), help_text=_("Select '----' for a one time only event."))
     end_recurring_period = models.DateTimeField(_("end recurring period"), null = True, blank = True, help_text=_("This date is ignored for one time only events."))
-    calendar = models.ForeignKey(Calendar, blank=True)
+    calendar = models.ForeignKey(Calendar, blank=True, null=True)
     objects = EventManager()
 
     class Meta:
@@ -174,7 +174,11 @@ class Event(models.Model):
         while True:
             next = generator.next()
             yield occ_replacer.get_occurrence(next)
-
+    
+    def next_occurrence(self):
+        for o in self.occurrences_after():
+            return o
+    
 
 class EventRelationManager(models.Manager):
     '''
