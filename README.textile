@@ -65,3 +65,10 @@ Default:
     get_events(request, calendar):
         return calendar.event_set.all()
 </pre>
+
+h2. urls.py
+
+Add : 
+<pre>
+    (r'^schedule/', include('schedule.urls')),
+</pre>

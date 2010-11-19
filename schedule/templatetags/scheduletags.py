@@ -194,6 +194,7 @@ def prevnext( target, slug, period, fmt=None):
         'period' : period,
         'period_name': format(period.start, fmt),
         'target':target,
+        'MEDIA_URL': settings.MEDIA_URL,
     }
     return context
 
@@ -201,6 +202,7 @@ def prevnext( target, slug, period, fmt=None):
 def detail( occurrence ):
     context = {
         'occurrence' : occurrence,
+        'MEDIA_URL': settings.MEDIA_URL,
     }
     return context
 
