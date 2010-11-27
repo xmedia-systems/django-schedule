@@ -13,7 +13,9 @@ The latest stable version is currently `v1.0-rc1 <http://github.com/thauber/djan
 	pip install -e get+get://github.com/thauber/django-schedule.git@v1.0-rc1#egg=schedule
 
 
-Insalling the Latest Development Version
+Requires python-dateutil.
+
+Installing the Latest Development Version
 ----------------------------------------
 
 For those interested in living on the edge, the github repo can be cloaned via:
