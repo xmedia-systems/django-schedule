@@ -116,5 +116,5 @@ url(r'^event_json/$',
     'schedule.views.event_json',
     name="event_json"),
 
- url(r'$', object_list, info_dict, name='schedule'), 
+ url(r'^$', object_list, info_dict, name='schedule'), 
 )

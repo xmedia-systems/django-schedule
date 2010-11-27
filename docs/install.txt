@@ -3,22 +3,26 @@
 Installation
 ============
 
-The project is available through Tony Hauber's `Github Repository <http://github.com/thauber/django-schedule/tree>`_. Currently, there's no 1.0 release, but the current release candidate is considered stable.
+The project is available through Bartek Gorny's `Github Repository <http://github.com/bartekgorny/django-schedule/tree>`_.
+
+Requirements
+------------
+
+python-dateutil
 
 Installing the Latest Stable Version
 ------------------------------------
 
-The latest stable version is currently `v1.0-rc1 <http://github.com/thauber/django-schedule/tree/v1.0-rc1>`_. It can be installed via `pip <http://pip.openplans.org>`_ with:
+There is no official release at the moment, as the project is being reviewed after
+a year of stagnation. Anyway, the current version should be stable. Release
+is coming soon.
 
-	pip install -e get+get://github.com/thauber/django-schedule.git@v1.0-rc1#egg=schedule
+Installing the Latest Development Version
+-----------------------------------------
 
+Clone the github repo via:
 
-Insalling the Latest Development Version
-----------------------------------------
-
-For those interested in living on the edge, the github repo can be cloaned via:
-
-	git clone git@github.com/thauber/django-schedule.git 
+	git clone git://github.com/bartekgorny/django-schedule.git
 
 .. _ref-configure:
 
@@ -31,4 +35,13 @@ Configuration
 2. Add ``(r'^schedule/', include('schedule.urls')),`` to your urls.py (changing ``r`^schedule/'`` to whatever url pattern you'd like django-schedule to live at)
 
 3. Resync your database ``./manage.py syncdb``
- 
+
+=============================
+Installing the Ajax interface
+=============================
+
+This feature should work fine, though it is not guaranteed. To use it:
+
+1. Check out ajax_ui branch
+
+2. Add "schedule_weekcal/templates" to TEMPLATE_DIRS
