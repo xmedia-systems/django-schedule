@@ -48,5 +48,5 @@ class RuleForm(forms.ModelForm):
                     if len(param[1]) == 1:
                         param = (param[0], param[1][0])
         except ValueError:
-            raise forms.ValidationError(_("Params format looks invalide"))
+            raise forms.ValidationError(_("Params format looks invalid"))
         return self.cleaned_data["params"]
