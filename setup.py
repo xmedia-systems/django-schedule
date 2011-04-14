@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 from setuptools import setup, find_packages
- 
+
+dateutil = 'python-dateutil'
+if sys.version_info < (3, 0):
+    dateutil = 'python-dateutil==1.5'
+
 setup(
     name='django-schedule',
     version='0.5b',
@@ -11,7 +16,7 @@ setup(
     url='http://github.com/thauber/django-schedule/tree/master',
     packages=[
         'schedule',
-        'schedule.conf',
+		'schedule.conf',
         'schedule.feeds',
         'schedule.management',
         'schedule.management.commands',
@@ -29,7 +34,7 @@ setup(
                  'Operating System :: OS Independent',
                  'Programming Language :: Python',
                  'Topic :: Utilities'],
-    install_requires=['setuptools', 'vobject', 'python-dateutil==1.5'],
+    install_requires=['setuptools', 'vobject', dateutil],
     license='BSD',
     test_suite = "schedule.tests",
 )
