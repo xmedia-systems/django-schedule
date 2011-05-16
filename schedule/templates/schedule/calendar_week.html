@@ -1,7 +1,10 @@
 {% extends "schedule/base.html" %}
 {% load scheduletags %}
 
-{% include "schedule/_dialogs.html" %}
+{% block extra_head %}
+    {{ block.super }}
+    {% include "schedule/_dialogs.html" %}
+{% endblock %}
 
 {% block body %}
 
