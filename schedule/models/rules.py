@@ -20,7 +20,6 @@ class Rule(models.Model):
 
     * name - the human friendly name of this kind of recursion.
     * description - a short description describing this type of recursion.
-    * priority - optional rule priority
     * frequency - the base recurrence period
     * param - extra params required to define this type of recursion. The params
       should follow this format:
@@ -45,7 +44,6 @@ class Rule(models.Model):
     """
     name = models.CharField(_("name"), max_length=32)
     description = models.TextField(_("description"))
-    priority = models.IntegerField(_("priority"), null=True, blank=True, unique=True)
     frequency = models.CharField(_("frequency"), choices=freqs, max_length=10)
     params = models.TextField(_("params"), null=True, blank=True)
 
