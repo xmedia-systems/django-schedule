@@ -54,7 +54,6 @@ class Event(models.Model):
             occurences = Occurrence.objects.filter(event=self.pk)
             for occ in occurences:
                 occ.original_start = occ.original_start + (self.start - old_event.start)
-                print occ.original_start
                 occ.original_end = occ.original_end + (self.end - old_event.end)
                 occ.save()
 
