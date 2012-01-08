@@ -49,6 +49,17 @@ class Event(models.Model):
             'end': date(self.end, date_format),
         }
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_event = Event.objects.get(pk=self.pk)
+            occurences = Occurrence.objects.filter(event=self.pk)
+            for occ in occurences:
+                occ.original_start = occ.original_start + (self.start - old_event.start)
+                occ.original_end = occ.original_end + (self.end - old_event.end)
+                occ.save()
+
+        super(Event, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('event', args=[self.id])
 
@@ -133,7 +144,7 @@ class Event(models.Model):
             o_starts = rule.between(start-difference, end, inc=False)
             for o_start in o_starts:
                 o_end = o_start + difference
-                occurrences.append(self._create_occurrence(o_start, o_end))
+                occurrences.append(self.get_occurrence(o_start))
             return occurrences
         else:
             # check if event is in the period
