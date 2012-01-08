@@ -31,6 +31,7 @@ class Event(models.Model):
     created_on = models.DateTimeField(_("created on"), default = datetime.datetime.now)
     rule = models.ForeignKey(Rule, null = True, blank = True, verbose_name=_("rule"), help_text=_("Select '----' for a one time only event."))
     end_recurring_period = models.DateTimeField(_("end recurring period"), null = True, blank = True, help_text=_("This date is ignored for one time only events."))
+    priority = models.IntegerField(_("priority"), null=True, blank=True)
     calendar = models.ForeignKey(Calendar, blank=True, null=True)
     objects = EventManager()
 
@@ -158,7 +159,7 @@ class Event(models.Model):
         difference = self.end - self.start
         while True:
             o_start = date_iter.next()
-            if o_start > self.end_recurring_period:
+            if self.end_recurring_period and o_start > self.end_recurring_period:
                 raise StopIteration
             o_end = o_start + difference
             if o_end > after:
