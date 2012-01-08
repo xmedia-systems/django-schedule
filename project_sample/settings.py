@@ -60,7 +60,7 @@ SECRET_KEY = '+3^08&lnsm^nl1iozv=a-9!e4x$*o%g6pkx=y$)oc8#r$ndn7t'
 TEMPLATE_LOADERS = (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
-        )
+)
 
 MIDDLEWARE_CLASSES = (
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,16 +68,15 @@ MIDDLEWARE_CLASSES = (
         'django.middleware.common.CommonMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'debug_toolbar.middleware.DebugToolbarMiddleware',
-        )
+)
 
 ROOT_URLCONF = 'project_sample.urls'
 
 TEMPLATE_DIRS = (
-        # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-        # Always use forward slashes, even on Windows.
-        # Don't forget to use absolute paths, not relative paths.
-        os.path.join(PROJECT_DIR,"templates"),
-        )
+    # uncomment this to use ajax week view
+    os.path.join(PROJECT_DIR,"schedule_weekcal/templates"),
+    os.path.join(PROJECT_DIR,"templates"),
+)
 
 INSTALLED_APPS = (
         'django.contrib.auth',
@@ -88,7 +87,7 @@ INSTALLED_APPS = (
         'django.contrib.admindocs',
         'schedule',
         'debug_toolbar',
-        )
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
         'django.contrib.auth.context_processors.auth',
@@ -96,7 +95,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
         "django.core.context_processors.i18n",
         "django.core.context_processors.media",
         "django.core.context_processors.request",
-        )
+)
 
 FIRST_DAY_OF_WEEK = 1 # Monday
 
