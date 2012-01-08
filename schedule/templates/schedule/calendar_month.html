@@ -3,10 +3,13 @@
 
 {% block extra_head %}
     {{ block.super }}
-    {% include "schedule/_dialogs.html" %}
+    <script type="text/javascript">
+        {% include "schedule/dialogs.js" %}
+    </script>
 {% endblock %}
 
 {% block body %}
+{% include "schedule/_dialogs.html" %}
 <div class="tablewrapper">
   <div class="calendarname">{{ calendar.name }}</div>
   {% prevnext "month_calendar" calendar.slug periods.month "F Y"%}
